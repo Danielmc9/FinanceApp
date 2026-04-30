@@ -12,18 +12,20 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExpenseDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(expense: Expense)
 
     @Query("SELECT * FROM expenses WHERE userId = :userId ORDER BY date DESC")
-    fun getExpensesByUser(userId: Long): Flow<List<Expense>>
+    fun getExpensesByUser(userId:Long): Flow<List<Expense>>
 
     @Query("SELECT * FROM expenses WHERE userId = :userId AND category = :category ORDER BY date DESC")
-    fun getExpensesByCategory(userId: Long,category: ExpenseCategory): Flow<List<Expense>>
+    fun getExpensesByCategory(userId:Long, category: ExpenseCategory): Flow<List<Expense>>
 
-    @Query("SELECT * FROM expenses WHERE UserId = :userId AND date BETWEEN :startDate AND :endDate ORDER BY date DESC")
-    fun getExpensesByDateRange(userId: Long,startDate: Long, endDate: Long): Flow<Double>
+    @Query("SELECT * FROM expenses WHERE userId = :userId AND date BETWEEN :startDate AND :endDate ORDER BY date DESC")
+    fun getExpensesByDateRange(userId: Long, startDate: Long, endDate: Long): Flow<List<Expense>>
+
+    @Query("SELECT SUM(amount) FROM expenses WHERE userId= :userId AND date BETWEEN :startDate AND :endDate")
+    fun getTotalExpensesByDateRange(userId: Long, startDate: Long, endDate: Long): Flow<Double>
 
     @Query("SELECT SUM(amount) FROM expenses WHERE userId = :userId AND category = :category AND date BETWEEN :startDate AND :endDate")
     fun getTotalExpensesByCategoryAndDateRange(
@@ -38,4 +40,5 @@ interface ExpenseDao {
 
     @Delete
     suspend fun delete(expense: Expense)
+
 }
