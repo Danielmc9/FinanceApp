@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "expenses")
 data class Expense(
     @PrimaryKey(autoGenerate = true)
+    val userId: Long,
     val id: Long = 0,
     val amount: Double,
     val category: ExpenseCategory,
